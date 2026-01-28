@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>David Hoffman | Premier Criminal Defense</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        :root {
+            --gold-accent: #C5A059;
+            --gold-hover: #E6C87F;
+            --navy-dark: #0f172a;
+            --navy-light: #1e293b;
+            --text-white: #FFFFFF;
+            --text-off-white: #cbd5e1;
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Lato', sans-serif;
+            --header-height: 90px;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--navy-dark);
+            color: var(--text-off-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 { font-family: var(--font-serif); color: var(--text-white); font-weight: 700; }
+        .text-gold { color: var(--gold-accent); }
+        .text-italic { font-style: italic; font-weight: 400; font-family: var(--font-serif); }
+        .section-header { text-align: center; margin-bottom: 4rem; padding: 0 1rem;}
+        .section-title { font-size: 3rem; margin-bottom: 1rem; color: var(--text-white); }
+        .divider { width: 80px; height: 3px; background: var(--gold-accent); margin: 0 auto; }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--text-white);
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            z-index: 1001;
+            white-space: nowrap;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links { 
+            display: flex; 
+            list-style: none; 
+            gap: 2rem; 
+        }
+        
+        .nav-links a {
+            position: relative;
+            text-decoration: none;
+            color: var(--text-off-white);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+            padding: 5px 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--gold-accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--gold-hover); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .cta-btn {
+            background: var(--gold-accent);
+            color: #0f172a;
+            padding: 0.8rem 1.8rem;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 2px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .cta-btn:hover {
+            background: #fff;
+            color: var(--navy-dark);
+        }
+
+        /* Mobile Toggle Button */
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--text-white);
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* --- HERO CAROUSEL --- */
+        .hero-carousel {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            margin-top: 0;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            visibility: hidden;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; }
+        
+        .slide.active .bg-img {
+            animation: kenBurns 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes kenBurns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        .bg-img {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.6) 50%, rgba(15,23,42,0.1) 100%);
+            display: flex;
+            align-items: center;
+            padding-left: 8%;
+        }
+
+        .slide-content {
+            max-width: 800px;
+            transform: translateY(40px);
+            opacity: 0;
+            transition: all 1s ease 0.5s;
+        }
+
+        .slide.active .slide-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide-subtitle {
+            font-family: var(--font-sans);
+            color: var(--gold-accent);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .slide-title {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .slide-btn {
+            display: inline-block;
+            border: 2px solid var(--gold-accent);
+            color: var(--text-white);
+            padding: 1rem 2.5rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .slide-btn:hover { background: var(--gold-accent); color: var(--navy-dark); }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 12px; height: 12px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .dot.active { background: var(--gold-accent); border-color: var(--gold-accent); }
+
+        /* --- SECTIONS COMMON --- */
+        .section-padding { padding: 8rem 5%; }
+
+        /* --- PRACTICE AREAS --- */
+        .practice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .practice-card {
+            position: relative;
+            height: 400px;
+            border: 1px solid rgba(255,255,255,0.05);
+            overflow: hidden;
+            background: #000;
+        }
+
+        .card-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+            opacity: 0.6;
+        }
+
+        .practice-card:hover .card-img { transform: scale(1.1); opacity: 0.3; }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(15,23,42,1), transparent);
+            border-left: 0px solid var(--gold-accent);
+            transition: border 0.3s;
+        }
+
+        .practice-card:hover .card-overlay { border-left: 5px solid var(--gold-accent); }
+
+        .card-title { font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--text-white); }
+        
+        .card-desc {
+            color: #cbd5e1; font-size: 0.95rem;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .practice-card:hover .card-desc { opacity: 1; transform: translateY(0); }
+
+        /* --- REPLACEMENT SECTION: WHY CHOOSE US (REPLACES RESULTS) --- */
+        .why-us-section { background-color: var(--navy-light); }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.02);
+            padding: 3rem 2rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold-accent);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--gold-accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* --- ATTORNEY PROFILE --- */
+        .attorney-section { display: flex; flex-wrap: wrap; background: #fff; }
+       .attorney-img {
+        flex: 1; min-width: 450px;
+    /* "center -50px" moves the image UP by 50 pixels */
+       background: url('dhh-headshot.jpg') center -50px / cover no-repeat;
+        min-height: 600px;
+       }
+        .attorney-content {
+            flex: 1; min-width: 450px; padding: 6rem 5%;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .attorney-content h2 { color: var(--navy-dark); font-size: 3rem; margin-bottom: 1.5rem; }
+        .attorney-content p { color: #555; margin-bottom: 1.5rem; font-size: 1.1rem; }
+        .signature { font-family: 'Mrs Saint Delafield', cursive; font-size: 3rem; color: var(--gold-accent); margin-top: 1rem; }
+
+        /* --- CONTACT SECTION --- */
+        .contact-section { background-color: var(--navy-dark); position: relative; }
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+        
+        .contact-info h3 { color: var(--gold-accent); margin-bottom: 1.5rem; font-size: 1.5rem; }
+        .contact-item { display: flex; gap: 1rem; margin-bottom: 2rem; align-items: flex-start; }
+        .contact-icon { color: var(--gold-accent); font-size: 1.2rem; margin-top: 5px; }
+        .contact-text h4 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+        .contact-text p { color: #888; }
+
+        .contact-form {
+            background: var(--navy-light);
+            padding: 3rem;
+            border-top: 4px solid var(--gold-accent);
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            font-family: var(--font-sans);
+        }
+        .form-control:focus { outline: none; border-color: var(--gold-accent); }
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gold-accent);
+            color: var(--navy-dark);
+            border: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .submit-btn:hover { background: #fff; }
+
+        /* --- FOOTER (FIXED) --- */
+        footer {
+            background: #050911; /* Even darker for footer */
+            padding: 5rem 5% 2rem;
+            border-top: 1px solid #1e293b;
+        }
+        .footer-grid {
+            display: grid;
+            /* Improved grid logic to prevent overlap on medium screens */
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: start;
+        }
+        .footer-col h4 { color: var(--gold-accent); margin-bottom: 1.5rem; font-size: 1.2rem; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col li { margin-bottom: 0.8rem; color: #888; display: block;}
+        .footer-col a { color: #888; text-decoration: none; transition: 0.3s; display: inline-block;}
+        .footer-col a:hover { color: var(--gold-accent); transform: translateX(5px); }
+        
+        .footer-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            max-width: 300px;
+            line-height: 1.8;
+        }
+
+        .copyright {
+            text-align: center; margin-top: 4rem; color: #475569; 
+            font-size: 0.8rem; border-top: 1px solid #1e293b; padding-top: 2rem;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media(max-width: 1024px) {
+            .slide-title { font-size: 3rem; }
+            
+            /* Mobile Nav Styles */
+            .mobile-toggle { display: block; }
+            .nav-menu {
+                position: fixed;
+                top: var(--header-height);
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - var(--header-height));
+                background: var(--navy-dark);
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 4rem;
+                transition: 0.3s ease;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+            .nav-menu.active { left: 0; }
+            .nav-links { flex-direction: column; align-items: center; gap: 2rem; width: 100%;}
+            .nav-links a { font-size: 1.2rem; }
+        }
+
+        @media(max-width: 768px) {
+            .contact-container { grid-template-columns: 1fr; }
+            .attorney-section { flex-direction: column-reverse; }
+            
+            /* --- FIX: Reset width so text fits on mobile --- */
+            .attorney-content { 
+                min-width: 100%; 
+                padding: 3rem 1.5rem; 
+            }
+            .attorney-img { 
+                width: 100%; 
+                min-width: 100%; 
+                height: 400px; 
+                min-height: 400px; 
+            }
+            /* ----------------------------------------------- */
+
+            .section-title { font-size: 2.2rem; }
+            .hero-carousel { height: 100vh; } /* Ensure full height on mobile */
+            .slide-content { padding-right: 5%; }
+            .slide-title { font-size: 2.5rem; }
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Mrs+Saint+Delafield&display=swap');
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <header>
+        <div class="logo">
+    <img src="https://i.ibb.co/6R30B0Hf/logo-cropped.jpg" alt="Hoffman Legal" style="height: 80px; width: auto; mix-blend-mode: lighten;">
+</div>
+        
+        <div class="mobile-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-links">
+                <li><a href="#home" onclick="toggleMenu()">Home</a></li>
+                <li><a href="#practice" onclick="toggleMenu()">Practice Areas</a></li>
+                <li><a href="#why-us" onclick="toggleMenu()">Why Us</a></li>
+                <li><a href="#attorney" onclick="toggleMenu()">Attorney</a></li>
+                <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
+            </ul>
+            <a href="#contact" class="cta-btn" onclick="toggleMenu()">Free Consultation</a>
+        </div>
+    </header>
+
+    <!-- HERO CAROUSEL -->
+    <section id="home" class="hero-carousel">
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1556484687-30636164638b?auto=format&fit=crop&q=80');"></div>
+            <div class="overlay">
+                <div class="slide-content">
+                    <span class="slide-subtitle">Unrelenting Criminal Defense</span>
+                    <h1 class="slide-title">Criminal Justice Defense Attorney<br>Speaking Up For <span class="text-gold">Florida Clients</span></h1>
+                    <a href="#contact" class="slide-btn">Review Your Case</a>
+                </div>
+            </div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="slide">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1589391886645-d51941baf7fb?auto=format&fit=crop&q=80');"></div>
+            <div class="overlay">
+                <div class="slide-content">
+                    <span class="slide-subtitle">Proven Trial Results</span>
+                    <h1 class="slide-title">When The Stakes<br>Are <span class="text-gold">Highest</span></h1>
+                    <a href="#why-us" class="slide-btn">The Hoffman Standard</a>
+                </div>
+            </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="slide">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1479142506502-19b3a3b7ff33?auto=format&fit=crop&q=80');"></div>
+            <div class="overlay">
+                <div class="slide-content">
+                    <span class="slide-subtitle">DUI Defense Experts</span>
+                    <h1 class="slide-title">Aggressive Defense<br>Against <span class="text-gold">DUI Charges</span></h1>
+                    <a href="#practice" class="slide-btn">DUI Services</a>
+                </div>
+            </div>
+        </div>
+        <!-- Slide 4 -->
+        <div class="slide">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80');"></div>
+            <div class="overlay">
+                <div class="slide-content">
+                    <span class="slide-subtitle">David Hoffman, Esq.</span>
+                    <h1 class="slide-title">Dedicated to Service.<br>Delivering <span class="text-gold">Justice.</span></h1>
+                    <a href="#attorney" class="slide-btn">Meet David</a>
+                </div>
+            </div>
+        </div>
+        <!-- Slide 5 -->
+        <div class="slide">
+            <div class="bg-img" style="background-image: url('https://images.unsplash.com/photo-1555374018-13a8994ab246?auto=format&fit=crop&q=80');"></div>
+            <div class="overlay">
+                <div class="slide-content">
+                    <span class="slide-subtitle">Comprehensive Strategy</span>
+                    <h1 class="slide-title">A Strategy Tailored<br>To Your <span class="text-gold">Defense</span></h1>
+                    <a href="#contact" class="slide-btn">Contact Us</a>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-dots">
+            <div class="dot active" onclick="goToSlide(0)"></div>
+            <div class="dot" onclick="goToSlide(1)"></div>
+            <div class="dot" onclick="goToSlide(2)"></div>
+            <div class="dot" onclick="goToSlide(3)"></div>
+            <div class="dot" onclick="goToSlide(4)"></div>
+        </div>
+    </section>
+
+    <!-- PRACTICE AREAS -->
+    <section id="practice" class="section-padding">
+        <div class="section-header">
+            <span class="text-gold text-italic" style="font-size: 1.3rem;">Areas of Expertise</span>
+            <h2 class="section-title">Legal Practice Areas</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="practice-grid">
+            <!-- FIXED IMAGE HERE: Using a night traffic scene that is reliable -->
+            <div class="practice-card">
+                <img src="https://images.unsplash.com/photo-1464219789935-c2d9d9aba644?auto=format&fit=crop&q=80" class="card-img" alt="DUI Defense Night Traffic">
+                <div class="card-overlay">
+                    <h3 class="card-title">DUI & Traffic</h3>
+                    <p class="card-desc">Protecting your license and reputation from drunk driving allegations with forensic precision.</p>
+                </div>
+            </div>
+            <div class="practice-card">
+                <img src="https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?auto=format&fit=crop&q=80" class="card-img" alt="Felony">
+                <div class="card-overlay">
+                    <h3 class="card-title">Felony Offenses</h3>
+                    <p class="card-desc">Strategic litigation for serious criminal charges carrying heavy penalties.</p>
+                </div>
+            </div>
+            <div class="practice-card">
+                <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&q=80" class="card-img" alt="Drug Crimes">
+                <div class="card-overlay">
+                    <h3 class="card-title">Drug Possession</h3>
+                    <p class="card-desc">Challenging search and seizure procedures in drug-related cases.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REPLACEMENT SECTION: WHY CHOOSE US (Previously Results) -->
+    <section id="why-us" class="section-padding why-us-section">
+        <div class="section-header">
+            <span class="text-gold text-italic" style="font-size: 1.3rem;">The Hoffman Difference</span>
+            <h2 class="section-title">Why Choose Us</h2>
+            <div class="divider"></div>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-gavel feature-icon"></i>
+                <h3>Aggressive Advocacy</h3>
+                <p>We don't just process cases; we fight them. From the moment we are retained, we prepare every case as if it were going to trial.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clock feature-icon"></i>
+                <h3>24/7 Availability</h3>
+                <p>Legal emergencies happen outside of business hours. Clients have direct access to their attorney when they need it most.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chess-king feature-icon"></i>
+                <h3>Strategic Insight</h3>
+                <p>With resounding experience, knowledge and expertise, we anticipate prosecution tactics and build proactive defense strategies to secure dismissals.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ATTORNEY PROFILE -->
+    <section id="attorney" class="attorney-section">
+        <div class="attorney-img"></div>
+        <div class="attorney-content">
+            <span class="text-gold text-italic" style="font-size: 1.2rem;">Lead Counsel</span>
+            <h2>David Hoffman</h2>
+            <div class="divider" style="margin: 0 0 2rem 0; width: 60px;"></div>
+            <p>The criminal justice system is inherently one where power skews toward the state. The average person simply does not have the investigative resources or the social power to fight prosecutors on their own. Attorney David Hoffman is a powerful advocate for the accused.</p>
+            <p>He understands prosecutor and police tactics and uses his experience as a former public defender to protect his clients’ rights. He has in-depth knowledge and a frank approach; you can rely on him to tell you honestly what to expect and do what is in your best interests – always.</p>
+            <div class="signature">David Hoffman</div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section-padding contact-section">
+        <div class="section-header">
+            <span class="text-gold text-italic" style="font-size: 1.3rem;">Get In Touch</span>
+            <h2 class="section-title">Contact Us</h2>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="contact-container">
+            <!-- Contact Info -->
+            <div class="contact-info">
+                <h3>Request A Free Consultation</h3>
+                <p style="margin-bottom: 2rem; color: #cbd5e1;">Legal emergencies don't wait. Contact us 24/7 to speak with an experienced attorney about your case. Your future is worth fighting for.</p>
+                
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt contact-icon"></i>
+                    <div class="contact-text">
+                        <h4>Our Office</h4>
+                        <p>101 SW 1st Street,
+                   Suite CW12 Dania Beach, 
+                   FL 33004</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-phone contact-icon"></i>
+                    <div class="contact-text">
+                        <h4>Phone</h4>
+                        <p>(954) 667-9011</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fas fa-envelope contact-icon"></i>
+                    <div class="contact-text">
+                        <h4>Email</h4>
+                        <p>david@hoffman.legal</p>
+                    </div>
+                </div>
+            </div>
+
+            
+              <!-- Contact Form -->
+            <div class="contact-form">
+                <form onsubmit="event.preventDefault(); alert('Thank you for your submission. We will contact you shortly.');">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Email Address" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" placeholder="Phone Number">
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="4" placeholder="Briefly describe your case..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (FIXED ALIGNMENT) -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 0.5rem;">HOFFMAN<span class="text-gold">.LEGAL</span></div>
+                <p class="footer-desc">Defending the accused with integrity, honor, and skill. We are committed to protecting your future.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul>
+                    <li><i class="fas fa-phone text-gold"></i> &nbsp; (954) 667-9011</li>
+                    <li><i class="fas fa-envelope text-gold"></i> &nbsp; david@hoffman.legal</li>
+                    <li><i class="fas fa-map-marker-alt text-gold"></i> &nbsp;101 SW 1st Street,
+Suite CW12 Dania Beach, FL 33004 </li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Practice Areas</h4>
+                <ul>
+                    <li><a href="#practice">DUI Defense</a></li>
+                    <li><a href="#practice">Drug Crimes</a></li>
+                    <li><a href="#practice">Domestic Violence</a></li>
+                    <li><a href="#practice">Felony Offenses</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#attorney">Attorney Profile</a></li>
+                    <li><a href="#why-us">Why Choose Us</a></li>
+                    <li><a href="#contact">Free Consultation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Hoffman.Legal.com. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // --- MOBILE MENU TOGGLE ---
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('active');
+            
+            const icon = document.querySelector('.mobile-toggle i');
+            if (navMenu.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // --- SLIDER LOGIC ---
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        const slideInterval = 6000;
+        let sliderTimer;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            clearInterval(sliderTimer);
+            sliderTimer = setInterval(nextSlide, slideInterval);
+        }
+
+        sliderTimer = setInterval(nextSlide, slideInterval);
+
+        // --- HEADER SCROLL EFFECT ---
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(15, 23, 42, 1)';
+                header.style.height = '80px';
+                header.style.boxShadow = '0 4px 20px rgba(0,0,0,0.5)';
+            } else {
+                header.style.background = 'rgba(15, 23, 42, 0.95)';
+                header.style.height = '90px';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
