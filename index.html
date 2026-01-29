@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>David Hoffman | Premier Criminal Defense</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <style>
         /* --- RESET & VARIABLES --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -66,6 +68,7 @@
             align-items: center;
             z-index: 1001;
             white-space: nowrap;
+            background: transparent;
         }
 
         .nav-menu {
@@ -258,7 +261,7 @@
         /* --- PRACTICE AREAS --- */
         .practice-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             max-width: 1400px;
             margin: 0 auto;
@@ -279,7 +282,47 @@
             opacity: 0.6;
         }
 
-        .practice-card:hover .card-img { transform: scale(1.1); opacity: 0.3; }
+        .card-visual {
+            position: absolute;
+            top: 8px; left: 50%;
+            transform: translateX(-50%);
+            width: 120px; height: 120px;
+            display: flex; align-items: center; justify-content: center;
+            padding: 0;
+            pointer-events: none;
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            z-index: 1;
+        }
+
+        .card-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(197,160,89,0.06);
+            border: 2px solid rgba(197,160,89,0.14);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.5);
+            transition: transform 0.35s ease, background 0.35s ease;
+            z-index: 1;
+        }
+
+        .card-visual i {
+            position: relative; z-index: 2;
+            font-size: 2.6rem;
+            color: var(--gold-accent);
+            opacity: 1;
+            display: inline-flex; align-items: center; justify-content: center;
+            filter: drop-shadow(0 8px 18px rgba(197,160,89,0.14));
+            transition: transform 0.35s ease;
+        }
+
+        .practice-card:hover .card-visual { transform: translateX(-50%) translateY(-6px); opacity: 1; }
+
+        .practice-card:hover .card-visual::before { transform: scale(1.06); background: rgba(197,160,89,0.10); }
+
+        .practice-card:hover .card-img { transform: none; opacity: 0; }
+
+        .card-overlay { z-index: 3; }
 
         .card-overlay {
             position: absolute;
@@ -439,6 +482,27 @@
             font-size: 0.8rem; border-top: 1px solid #1e293b; padding-top: 2rem;
         }
 
+        /* --- MAP STYLES --- */
+        .map-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(197,160,89,0.2);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            margin-top: 1.5rem;
+        }
+
+        .map-container.footer-map {
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        .leaflet-container {
+            background: #1a1a2e;
+            border-radius: 6px;
+        }
+
         /* --- RESPONSIVE --- */
         @media(max-width: 1024px) {
             .slide-title { font-size: 3rem; }
@@ -494,8 +558,8 @@
     <!-- NAVIGATION -->
     <header>
         <div class="logo">
-    <img src="https://i.ibb.co/6R30B0Hf/logo-cropped.jpg" alt="Hoffman Legal" style="height: 80px; width: auto; mix-blend-mode: lighten;">
-</div>
+        <img src="https://i.ibb.co/6R30B0Hf/logo-cropped.jpg" alt="Hoffman Legal" style="height: 80px; width: auto; mix-blend-mode: screen; filter: brightness(1.1); background: transparent;">
+    </div>
         
         <div class="mobile-toggle" onclick="toggleMenu()">
             <i class="fas fa-bars"></i>
@@ -504,7 +568,20 @@
         <div class="nav-menu" id="navMenu">
             <ul class="nav-links">
                 <li><a href="#home" onclick="toggleMenu()">Home</a></li>
-                <li><a href="#practice" onclick="toggleMenu()">Practice Areas</a></li>
+                <li class="has-dropdown">
+                    <a href="#practice" onclick="toggleMenu()">Practice Areas <i class="fas fa-caret-down" style="margin-left:6px;font-size:0.85rem;"></i></a>
+                    <ul class="dropdown-menu" style="position: absolute; background: var(--navy-dark); border:1px solid rgba(255,255,255,0.04); list-style:none; padding:10px 12px; margin-top:8px; display:none;">
+                        <li style="padding:6px 0;"><a href="#practice-criminal" onclick="toggleMenu()">Criminal Defense</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-dui" onclick="toggleMenu()">DUI Defense</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-drug" onclick="toggleMenu()">Drug Possession Cases</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-theft" onclick="toggleMenu()">Theft, Robbery And Burglary</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-assault" onclick="toggleMenu()">Assault And Battery</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-sexual" onclick="toggleMenu()">Sexual Battery Cases</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-white-collar" onclick="toggleMenu()">White Collar Crimes</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-injunctions" onclick="toggleMenu()">Injunctions</a></li>
+                        <li style="padding:6px 0;"><a href="#practice-expunge" onclick="toggleMenu()">Expunge And Seal Record</a></li>
+                    </ul>
+                </li>
                 <li><a href="#why-us" onclick="toggleMenu()">Why Us</a></li>
                 <li><a href="#attorney" onclick="toggleMenu()">Attorney</a></li>
                 <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
@@ -537,26 +614,75 @@
             <div class="divider"></div>
         </div>
         <div class="practice-grid">
-            <!-- FIXED IMAGE HERE: Using a night traffic scene that is reliable -->
-            <div class="practice-card">
-                <img src="https://images.unsplash.com/photo-1464219789935-c2d9d9aba644?auto=format&fit=crop&q=80" class="card-img" alt="DUI Defense Night Traffic">
+            <div class="practice-card" id="practice-criminal">
+                <div class="card-visual"><i class="fas fa-gavel"></i></div>
                 <div class="card-overlay">
-                    <h3 class="card-title">DUI & Traffic</h3>
+                    <h3 class="card-title">Criminal Defense</h3>
+                    <p class="card-desc">Robust defense across misdemeanors and felonies to protect your rights and freedom.</p>
+                </div>
+            </div>
+
+            <div class="practice-card" id="practice-dui">
+                <div class="card-visual"><i class="fas fa-car"></i></div>
+                <div class="card-overlay">
+                    <h3 class="card-title">DUI Defense</h3>
                     <p class="card-desc">Protecting your license and reputation from drunk driving allegations with forensic precision.</p>
                 </div>
             </div>
-            <div class="practice-card">
-                <img src="https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?auto=format&fit=crop&q=80" class="card-img" alt="Felony">
+
+            <div class="practice-card" id="practice-drug">
+                <div class="card-visual"><i class="fas fa-capsules"></i></div>
                 <div class="card-overlay">
-                    <h3 class="card-title">Felony Offenses</h3>
-                    <p class="card-desc">Strategic litigation for serious criminal charges carrying heavy penalties.</p>
+                    <h3 class="card-title">Drug Possession Cases</h3>
+                    <p class="card-desc">Challenging search and seizure procedures and fighting possession charges.</p>
                 </div>
             </div>
-            <div class="practice-card">
-                <img src="https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&q=80" class="card-img" alt="Drug Crimes">
+
+            <div class="practice-card" id="practice-theft">
+                <div class="card-visual"><i class="fas fa-hand-holding-dollar"></i></div>
                 <div class="card-overlay">
-                    <h3 class="card-title">Drug Possession</h3>
-                    <p class="card-desc">Challenging search and seizure procedures in drug-related cases.</p>
+                    <h3 class="card-title">Theft, Robbery And Burglary</h3>
+                    <p class="card-desc">Defense strategies tailored to property-related offenses and complex investigations.</p>
+                </div>
+            </div>
+
+            <div class="practice-card" id="practice-assault">
+                <div class="card-visual"><i class="fas fa-user-injured"></i></div>
+                <div class="card-overlay">
+                    <h3 class="card-title">Assault And Battery</h3>
+                    <p class="card-desc">Aggressive representation in violent crime allegations to protect your liberty.</p>
+                </div>
+            </div>
+
+            <div class="practice-card" id="practice-sexual">
+                <div class="card-visual"><i class="fas fa-shield-alt"></i></div>
+                <div class="card-overlay">
+                    <h3 class="card-title">Sexual Battery Cases</h3>
+                    <p class="card-desc">Sensitive, experienced defense against sexual offense allegations with rigorous investigation.</p>
+                </div>
+            </div>
+
+            <div class="practice-card" id="practice-white-collar">
+                <div class="card-visual"><i class="fas fa-briefcase"></i></div>
+                <div class="card-overlay">
+                    <h3 class="card-title">White Collar Crimes</h3>
+                    <p class="card-desc">Defense for fraud, embezzlement, and other financial allegations with forensic accounting support.</p>
+                </div>
+            </div>
+
+            <div class="practice-card" id="practice-injunctions">
+                <div class="card-visual"><i class="fas fa-balance-scale"></i></div>
+                <div class="card-overlay">
+                    <h3 class="card-title">Injunctions</h3>
+                    <p class="card-desc">Representation in temporary and permanent injunction proceedings to protect your rights.</p>
+                </div>
+            </div>
+
+            <div class="practice-card" id="practice-expunge">
+                <div class="card-visual"><i class="fas fa-file-alt"></i></div>
+                <div class="card-overlay">
+                    <h3 class="card-title">Expunge And Seal Record</h3>
+                    <p class="card-desc">Guidance and filings to clear eligible records and restore opportunities.</p>
                 </div>
             </div>
         </div>
@@ -640,6 +766,9 @@
                         <p>david@hoffman.legal</p>
                     </div>
                 </div>
+
+                <!-- Map -->
+                <div id="contact-map" class="map-container"></div>
             </div>
 
             
@@ -670,11 +799,13 @@
             <div class="footer-col">
                 <div class="logo" style="margin-bottom: 0.5rem;">HOFFMAN<span class="text-gold">.LEGAL</span></div>
                 <p class="footer-desc">Defending the accused with integrity, honor, and skill. We are committed to protecting your future.</p>
+                <!-- Footer Map -->
+                <div id="footer-map" class="map-container footer-map"></div>
             </div>
             <div class="footer-col">
                 <h4>Contact</h4>
                 <ul>
-                    <li><i class="fas fa-phone text-gold"></i> &nbsp; (954) 667-9011</li>
+                    <li><i class="fas fa-phone text-gold"></i> &nbsp; (954) 459-4236</li>
                     <li><i class="fas fa-envelope text-gold"></i> &nbsp; david@hoffman.legal</li>
                     <li><i class="fas fa-map-marker-alt text-gold"></i> &nbsp;101 SW 1st Street,
 Suite CW12 Dania Beach, FL 33004 </li>
@@ -683,10 +814,15 @@ Suite CW12 Dania Beach, FL 33004 </li>
             <div class="footer-col">
                 <h4>Practice Areas</h4>
                 <ul>
-                    <li><a href="#practice">DUI Defense</a></li>
-                    <li><a href="#practice">Drug Crimes</a></li>
-                    <li><a href="#practice">Domestic Violence</a></li>
-                    <li><a href="#practice">Felony Offenses</a></li>
+                    <li><a href="#practice-criminal">Criminal Defense</a></li>
+                    <li><a href="#practice-dui">DUI Defense</a></li>
+                    <li><a href="#practice-drug">Drug Possession Cases</a></li>
+                    <li><a href="#practice-theft">Theft, Robbery And Burglary</a></li>
+                    <li><a href="#practice-assault">Assault And Battery</a></li>
+                    <li><a href="#practice-sexual">Sexual Battery Cases</a></li>
+                    <li><a href="#practice-white-collar">White Collar Crimes</a></li>
+                    <li><a href="#practice-injunctions">Injunctions</a></li>
+                    <li><a href="#practice-expunge">Expunge And Seal Record</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -762,6 +898,64 @@ Suite CW12 Dania Beach, FL 33004 </li>
                 header.style.boxShadow = 'none';
             }
         });
+
+        // --- MAPS INITIALIZATION ---
+        const officeLatLng = [26.0546, -80.1389]; // Dania Beach, FL office location
+        
+        // Initialize Contact Map
+        const contactMap = L.map('contact-map').setView(officeLatLng, 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19,
+            className: 'map-tiles'
+        }).addTo(contactMap);
+        
+        const contactMarker = L.marker(officeLatLng).addTo(contactMap);
+        contactMarker.bindPopup('<div style="color:#0f172a;"><strong>Hoffman Legal</strong><br>101 SW 1st Street, Suite CW12<br>Dania Beach, FL 33004</div>').openPopup();
+        
+        // Lock contact map to prevent zoom/drag outside bounds
+        const southWest = L.latLng(26.0446, -80.1489);
+        const northEast = L.latLng(26.0646, -80.1289);
+        const bounds = L.latLngBounds(southWest, northEast);
+        contactMap.setMaxBounds(bounds);
+        contactMap.on('drag', () => contactMap.panInsideBounds(bounds, { animate: false }));
+        
+        // Initialize Footer Map
+        const footerMap = L.map('footer-map').setView(officeLatLng, 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(footerMap);
+        
+        const footerMarker = L.marker(officeLatLng).addTo(footerMap);
+        footerMarker.bindPopup('<div style="color:#0f172a;"><strong>Hoffman Legal</strong><br>101 SW 1st Street<br>Dania Beach, FL 33004</div>');
+        
+        // Lock footer map to prevent zoom/drag outside bounds
+        footerMap.setMaxBounds(bounds);
+        footerMap.on('drag', () => footerMap.panInsideBounds(bounds, { animate: false }));
+
+        // --- DROPDOWN (Practice Areas) ---
+        (function() {
+            const parent = document.querySelector('.has-dropdown');
+            const menu = parent ? parent.querySelector('.dropdown-menu') : null;
+            if (!parent || !menu) return;
+
+            // Show on hover for desktop
+            parent.addEventListener('mouseenter', () => {
+                if (window.innerWidth > 768) menu.style.display = 'block';
+            });
+            parent.addEventListener('mouseleave', () => {
+                if (window.innerWidth > 768) menu.style.display = 'none';
+            });
+
+            // Toggle on click for mobile
+            parent.querySelector('a').addEventListener('click', (e) => {
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+                }
+            });
+        })();
     </script>
 </body>
 </html>
